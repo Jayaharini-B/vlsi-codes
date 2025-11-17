@@ -1,0 +1,11 @@
+Full_adder
+module full_adder(a,b,cin,sum,cout);
+input a,b,cin;
+output sum,cout;
+wire x,y,z;
+xor a1(x,a,b);
+xor a2(sum,x,cin);
+and a3(y,a,b);
+and a4(z,x,cin);
+or a5(cout,z,y);
+endmodule

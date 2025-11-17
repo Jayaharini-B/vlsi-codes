@@ -1,0 +1,21 @@
+module flipflop(S,R,J,K,Din,T,CLK,RST,Q_SR,Q_T,Q_D,Q_JK);
+input S,R,J,K,Din,T,CLK,RST;
+output reg Q_SR,Q_T,Q_D,Q_JK;
+always @(posedge CLK or posedge RST)
+begin
+if(RST)
+begin
+Q_SR<=1'b0;
+Q_JK<=1'b0;
+Q_D<=1'b0;
+Q_T<=1'b0;
+end
+else
+begin
+Q_SR<=(Q_SR&(~R))|(S&(~R));
+Q_JK<=((~Q_JK)&J)|((~K)&Q_JK);
+Q_D<=Din;
+Q_T<=T^Q_T;
+end
+end
+endmodule

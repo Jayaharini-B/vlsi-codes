@@ -1,0 +1,47 @@
+module USR_top(Dout,Din,S,clk,reset,SINR,SINL);
+input [3:0]Din;
+input [1:0]S;
+input clk,reset,SINL,SINR;
+wire [3:0] w;
+output [3:0]Dout;
+wire [3:0]D_temp;
+
+assign Dout = D_temp;
+
+//MUX instantation
+MUX_4_1 m1(w[3],{Din[3],D_temp[2],SINR,D_temp[3]},{S[1],S[0]});
+MUX_4_1 m2(w[2],{Din[2],D_temp[1],D_temp[3],D_temp[2]},{S[1],S[0]});
+MUX_4_1 m3(w[1],{Din[1],D_temp[0],D_temp[2],D_temp[1]},{S[1],S[0]});
+MUX_4_1 m4(w[0],{Din[0],SINL,D_temp[1],D_temp[0]},{S[1],S[0]});
+// D=FF instantiation
+D_ff D1(D_temp[3],clk,reset,w[3]);
+D_ff D2(D_temp[2],clk,reset,w[2]);
+D_ff D3(D_temp[1],clk,reset,w[1]);
+D_ff D4(D_temp[0],clk,reset,w[0]);
+endmodule
+
+module MUX_4_1(data_out,data_in,sel);
+input [3:0]data_in;
+input [1:0]sel;
+output data_out;
+wire sel1_n,sel0_n,y0,y1,y2,y3;
+not  n1(sel1_n,sel[1]);
+not  n2(sel0_n,sel[0]);
+and  a1(y0, data_in [0],sel1_n,sel0_n);
+and  a2(y1, data_in [1],sel1_n,sel[0]);
+and  a3(y2, data_in [2],sel[1],sel0_n);
+and  a4(y3, data_in [3],sel[1],sel[0]);
+or  r1(data_out,y0,y1,y2,y3);
+endmodule
+
+module D_ff(D_out,clk,reset,Din);
+input clk,reset,Din;
+output reg D_out;
+always @(posedge clk or posedge reset)
+begin
+if(reset)
+D_out <= 1'b0;
+else
+D_out <= Din;
+end
+endmodule

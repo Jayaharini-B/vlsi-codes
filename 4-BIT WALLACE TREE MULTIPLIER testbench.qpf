@@ -1,0 +1,17 @@
+`timescale 10ns/10ps
+module top_tb;
+reg[3:0]x,y;
+wire [7:0]z;
+top ga(x,y,z);
+initial
+begin
+x=4'b0000;y=4'b0000;
+#10 x=4'b0100;y=4'b0001;
+#10 x=4'b0100;y=4'b0001;
+
+#10 x=4'b0010;y=4'b0011;
+
+#10 x=4'b1111;y=4'b1111;
+#10;
+end
+endmodule

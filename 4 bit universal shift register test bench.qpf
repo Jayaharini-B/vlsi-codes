@@ -1,0 +1,26 @@
+`timescale 10 ns/ 10 ns
+module USR_tb();
+reg [3:0]Din;
+reg [1:0]S;
+reg clk,reset,SINL,SINR;
+wire [3:0]Dout;
+USR_top U1(
+.Dout(Dout),
+.Din(Din),
+.S(S),
+.clk(clk),.reset(reset),.SINL(SINL),.SINR(SINR));
+initial
+begin
+reset <=1;
+clk <=0;
+Din<=4'b1;
+SINL = 1'b0;SINR = 1'b0; S<=2'b00;
+#5; reset<= 0;
+#50; S<= 2'b00;  //No change
+#50; S<= 2'b01; SINR= 1'b1; // Shift Right
+#50;  S<= 2'b10; SINL= 1'b1; // Shift Left
+#50; S<= 2'b11;  // Parallel Load
+end
+always #10 clk <=~clk; 
+endmodule
+
